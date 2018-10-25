@@ -3,8 +3,7 @@ var tableData = data;
 var tbody = d3.select("tbody");
 
 function updateTable(filtered){
-
-
+    tbody.append("p").text(`${filtered.length} records found`);
     filtered.forEach( x => {
         console.log("printing " + x["city"])
         var row = tbody.append("tr");
@@ -23,19 +22,17 @@ function updateTable(filtered){
 
 }
 
-// YOUR CODE HERE!
 function filterData(){
     d3.event.preventDefault();
-
-    //var s = d3.select("#datetime").text();
-    var s = d3.select("#datetime").property("value");
-    
+    tbody.selectAll("td").remove();
+    tbody.selectAll("p").remove();
+    var s = d3.select("#datetime").property("value");    
     var filtered = tableData.filter(val => (s === val["datetime"]));
     console.log("Filtering for " + filtered.length);
     if(filtered.length !== 0){
         updateTable(filtered);
     } else{
-
+        tbody.append("p").text(`No UFO activity observed on ${s}`);
     }
 
 }
