@@ -37,9 +37,47 @@ function filterData(){
 
 }
 
+function filterData1(){
+    d3.event.preventDefault();
+    tbody.selectAll("td").remove();
+    tbody.selectAll("p").remove();
+
+    var d = d3.select("#datetime").property("value");
+    var filtered = tableData;
+    if(d !== null && d !== ''){
+        filtered = filtered.filter(val => (d === val["datetime"]));
+    }
+    var c = d3.select("#city").property("value"); 
+    if(c !== null && c !== ''){
+        filtered = filtered.filter(val => (c === val["city"]));
+    }   
+    var s = d3.select("#state").property("value"); 
+    if(s !== null && s !== ''){
+        filtered = filtered.filter(val => (s === val["state"]));
+    }  
+
+    var co = d3.select("#country").property("value"); 
+    if(co !== null && co !== ''){
+        filtered = filtered.filter(val => (co === val["country"]));
+    }  
+
+    var sh = d3.select("#shape").property("value"); 
+    if(sh !== null && sh !== ''){
+        filtered = filtered.filter(val => (sh === val["shape"]));
+    }  
+
+    console.log("Filtering for " + filtered.length);
+    if(filtered.length !== 0){
+        updateTable(filtered);
+    } else{
+        tbody.append("p").text(`No UFO activity observed`);
+    }
+
+}
+
+
+//d3.select("#city").append("")
 
 
 
-
-
-d3.select("#filter-btn").on("click",filterData);
+d3.select("#filter-btn").on("click",filterData1);
