@@ -3,6 +3,11 @@
   font-family: Ubuntu, sans-serif;
 }
 
+#ufo-table {
+  -webkit-transition-delay: 1s; /* Safari */
+  transition-delay: 2s;
+}
+
 html,
 body {
   height: 100%;

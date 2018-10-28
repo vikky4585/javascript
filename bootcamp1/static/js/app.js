@@ -2,6 +2,17 @@
 var tableData = data;
 var tbody = d3.select("tbody");
 
+function removeDuplicates(arr){
+    var newArr = [];
+    for(x = 0; x < arr.length; x++){
+        if(!newArr.includes(arr[x])){
+            newArr.push(arr[x]);
+        }
+    }
+    return newArr;
+}
+
+
 function updateTable(filtered){
     tbody.append("p").text(`${filtered.length} records found`);
     filtered.forEach( x => {
@@ -18,26 +29,24 @@ function updateTable(filtered){
 
     });
 
+}
 
 
+function filterSelection(menu,field,filtereddata){
+    var sel = document.getElementById(field + "id");
+    var v = sel.options[sel.selectedIndex].value
+    if( v !== '' ){
+        if(v !== menu){
+            filtereddata = filtereddata.filter(val => (v === val[field]));
+            console.log(`Fltering for ${v}, ${filtereddata.length}`)
+        }
+
+    }
+
+    return filtereddata;
 }
 
 function filterData(){
-    d3.event.preventDefault();
-    tbody.selectAll("td").remove();
-    tbody.selectAll("p").remove();
-    var s = d3.select("#datetime").property("value");    
-    var filtered = tableData.filter(val => (s === val["datetime"]));
-    console.log("Filtering for " + filtered.length);
-    if(filtered.length !== 0){
-        updateTable(filtered);
-    } else{
-        tbody.append("p").text(`No UFO activity observed on ${s}`);
-    }
-
-}
-
-function filterData1(){
     d3.event.preventDefault();
     tbody.selectAll("td").remove();
     tbody.selectAll("p").remove();
@@ -46,25 +55,12 @@ function filterData1(){
     var filtered = tableData;
     if(d !== null && d !== ''){
         filtered = filtered.filter(val => (d === val["datetime"]));
+        console.log(`Fltering for ${d}, ${filtered.length}`)
     }
-    var c = d3.select("#city").property("value"); 
-    if(c !== null && c !== ''){
-        filtered = filtered.filter(val => (c === val["city"]));
-    }   
-    var s = d3.select("#state").property("value"); 
-    if(s !== null && s !== ''){
-        filtered = filtered.filter(val => (s === val["state"]));
-    }  
-
-    var co = d3.select("#country").property("value"); 
-    if(co !== null && co !== ''){
-        filtered = filtered.filter(val => (co === val["country"]));
-    }  
-
-    var sh = d3.select("#shape").property("value"); 
-    if(sh !== null && sh !== ''){
-        filtered = filtered.filter(val => (sh === val["shape"]));
-    }  
+    filtered = filterSelection("Select City","city",filtered);
+    filtered = filterSelection("Select State","state",filtered);
+    filtered = filterSelection("Select Country","country",filtered);
+    filtered = filterSelection("Select Shape","shape",filtered);
 
     console.log("Filtering for " + filtered.length);
     if(filtered.length !== 0){
@@ -74,10 +70,11 @@ function filterData1(){
     }
 
 }
+removeDuplicates(tableData.map(a => a["city"])).forEach(d => d3.select("#cityid").append("option").text(d));
+removeDuplicates(tableData.map(a => a["state"])).forEach(d => d3.select("#stateid").append("option").text(d));
+removeDuplicates(tableData.map(a => a["country"])).forEach(d => d3.select("#countryid").append("option").text(d));
+removeDuplicates(tableData.map(a => a["shape"])).forEach(d => d3.select("#shapeid").append("option").text(d));
+
+d3.select("#filter-btn").on("click",filterData);
 
 
-//d3.select("#city").append("")
-
-
-
-d3.select("#filter-btn").on("click",filterData1);

@@ -38,23 +38,27 @@
                       <li class="filter list-group-item">
                         <label for="date">Enter a Date</label>
                         <input class="form-control" id="datetime" type="text" placeholder="1/11/2011">
-
-                        <label for="city">Enter City</label>
-                        <input class="form-control" id="city" type="text" >
-
-                        <label for="state">Enter State</label>
-                        <input class="form-control" id="state" type="text" >
-
-                        <label for="country">Enter Country</label>
-                        <input class="form-control" id="country" type="text" >
-
-                        <label for="shape">Enter Shape</label>
-                        <input class="form-control" id="shape" type="text" >
+                        <p></p>
+                        <select name="cityid" id="cityid">
+                          <option value="">Select City</option>
+                        </select>
+                        <p></p>
+                        <select name="stateid" id="stateid">
+                          <option value="">Select State</option>
+                        </select>
+                        <p></p>
+                        <select name="countryid" id="countryid">
+                          <option value="">Select Country</option>
+                        </select>
+                        <p></p>
+                        <select name="shapeid" id="shapeid">
+                          <option value="">Select Shape</option>
+                        </select>
 
                       </li>
                     </ul>
                   </div>
-                  <button id="filter-btn" type="submit" class="btn btn-default">Filter Table</button>
+                  <button id="filter-btn" type="submit" class="btn btn-success toggle">Search</button>
                 </form>
               </div>
             </div>
