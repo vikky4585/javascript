@@ -1,6 +1,6 @@
 
-var svgH = 600;
-var svgW = 900;
+var svgH = 350;
+var svgW = 550;
 
 var margin = {
     left: 80,
@@ -11,8 +11,7 @@ var margin = {
 
 var chartH = svgH - margin.top - margin.bottom;
 var chartW = svgW - margin.left - margin.right;
-
-var svg = d3.select(".scatter")
+var svg = d3.select("#scatter")
             .append("svg")
             .attr("width", svgW)
             .attr("height", svgH);
@@ -30,12 +29,13 @@ function prepareChart(data){
     });
 
     var xScale = d3.scaleLinear()
-                   .domain([0, d3.max(data, d => d.poverty)])
+                   .domain([d3.min(data, d => d.poverty) - 1, d3.max(data, d => d.poverty)])
                    .range([0, chartW]);
-    
+    console.log("min " + d3.min(data, d => d.poverty))
+
     var yScale = d3.scaleLinear()
                    .domain([0, d3.max(data, d => d.healthcare)])
-                   .range([0, chartH]);
+                   .range([chartH, 0]);
 
     var bottomAxis = d3.axisBottom(xScale);
     var leftAxis = d3.axisLeft(yScale);
@@ -45,6 +45,29 @@ function prepareChart(data){
      .call(bottomAxis);
     
     g.append("g").call(leftAxis);
+
+
+    //create markers
+    var markerGroup = g.selectAll("circle")
+                        .data(data)
+                        .enter()
+                        .append("circle")
+                        .attr("cx", x => xScale(x.poverty))
+                        .attr("cy", y => yScale(y.healthcare))
+                        .attr("r", "8")
+                        .attr("fill", "darkblue")
+                        .attr("opacity", "0.5")
+    var textGroup = g.selectAll("text")
+                        .data(data)
+                        .enter()
+                        .append("text")
+                        .attr("x", x => xScale(x.poverty))
+                        .attr("y", y => yScale(y.healthcare))
+                        .attr("color", "black")
+                        .text(t => t.abbr)
+
+
+
 
 }
 
