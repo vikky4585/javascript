@@ -56,19 +56,33 @@ function prepareChart(data){
                         .attr("r", "8")
                         .attr("fill", "darkblue")
                         .attr("opacity", "0.5")
+    
+    for(var i =0 ; i < data.length; i++){
+        g.append("text").attr("x", xScale(data[i].poverty))
+        .attr("y", yScale(data[i].healthcare))
+        .attr("text-anchor","middle")
+        .attr("fill", "white")
+        .attr("dy",".3em")
+        .attr("style", "font-size:8")
+        .text(data[i].abbr);
+
+    }
     // var textGroup = g.selectAll("text")
     //                     .data(data)
     //                     .enter()
     //                     .append("text")
     //                     .attr("x", x => xScale(x.poverty))
     //                     .attr("y", y => yScale(y.healthcare))
-    //                     .attr("color", "black")
+    //                     .attr("text-anchor","middle")
+    //                     .attr("fill", "white")
+    //                     .attr("dy",".3em")
+    //                     .attr("style", "font-size:8")
     //                     .text(t => t.abbr)
 
     var tooltip = d3.tip()
                     .attr("class","tooltip")
                     .offset([60,20])
-                    .html(d => `<br>Poverty: ${d.poverty} <br> HealthCare: ${d.healthcare}`);
+                    .html(d => `<br>Poverty: ${d.abbr} <br> HealthCare: ${d.healthcare}`);
 
     g.call(tooltip);
 
