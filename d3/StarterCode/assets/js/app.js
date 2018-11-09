@@ -6,7 +6,7 @@ var margin = {
     left: 80,
     right:20,
     top:20,
-    bottom:60
+    bottom:78
 }
 
 var chartH = svgH - margin.top - margin.bottom;
@@ -54,7 +54,7 @@ function prepareChart(data){
                         .attr("cx", x => xScale(x.poverty))
                         .attr("cy", y => yScale(y.healthcare))
                         .attr("r", "8")
-                        .attr("fill", "darkblue")
+                        .attr("fill", "darkgreen")
                         .attr("opacity", "0.5")
     
     for(var i =0 ; i < data.length; i++){
@@ -97,18 +97,46 @@ function prepareChart(data){
     g.append("text")
     .attr("transform", "rotate(-90)")
     .attr("class", "axisText")
-    .attr("x", 0 - margin.left -120  )
-    .attr("y", 0 - margin.bottom + 20)
+    .attr("x", 0 - margin.left -140  )
+    .attr("y", 0 - margin.bottom + 50)
     .text("Lacks Healthcare(%)")
-    .attr("style", "font-size:10")
-    .attr("style", "font-weight:bold")
+    .attr("style", "font-size:12")
+    //.attr("style", "font-weight:bold")
+
+    g.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("class", "axisText")
+    .attr("x", 0 - margin.left -140  )
+    .attr("y", 0 - margin.bottom + 30)
+    .text("Smokes(%)")
+    .attr("style", "font-size:12")
+
+    g.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("class", "axisText")
+    .attr("x", 0 - margin.left -140  )
+    .attr("y", 0 - margin.bottom + 10)
+    .text("Obese(%)")
+    .attr("style", "font-size:12")
+
 
     g.append("text").attr("class", "axisText")
         .attr("x", margin.left + 80)
-        .attr("y", margin.bottom + 245)
+        .attr("y", margin.bottom + 210)
         .text("In Poverty(%)")
-        .attr("style", "font-size:10")
-        .attr("style", "font-weight:bold")
+        .attr("style", "font-size:12")
+    
+    g.append("text").attr("class", "axisText")
+        .attr("x", margin.left + 80)
+        .attr("y", margin.bottom + 230)
+        .text("Age(%)")
+        .attr("style", "font-size:12")
+    
+    g.append("text").attr("class", "axisText")
+        .attr("x", margin.left + 80)
+        .attr("y", margin.bottom + 250)
+        .text("Household Income(%)")
+        .attr("style", "font-size:12")
 
 
 
