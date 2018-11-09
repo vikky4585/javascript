@@ -31,7 +31,6 @@ function prepareChart(data){
     var xScale = d3.scaleLinear()
                    .domain([d3.min(data, d => d.poverty) - 1, d3.max(data, d => d.poverty)])
                    .range([0, chartW]);
-    console.log("min " + d3.min(data, d => d.poverty))
 
     var yScale = d3.scaleLinear()
                    .domain([0, d3.max(data, d => d.healthcare)])
@@ -57,15 +56,45 @@ function prepareChart(data){
                         .attr("r", "8")
                         .attr("fill", "darkblue")
                         .attr("opacity", "0.5")
-    var textGroup = g.selectAll("text")
-                        .data(data)
-                        .enter()
-                        .append("text")
-                        .attr("x", x => xScale(x.poverty))
-                        .attr("y", y => yScale(y.healthcare))
-                        .attr("color", "black")
-                        .text(t => t.abbr)
+    // var textGroup = g.selectAll("text")
+    //                     .data(data)
+    //                     .enter()
+    //                     .append("text")
+    //                     .attr("x", x => xScale(x.poverty))
+    //                     .attr("y", y => yScale(y.healthcare))
+    //                     .attr("color", "black")
+    //                     .text(t => t.abbr)
 
+    var tooltip = d3.tip()
+                    .attr("class","tooltip")
+                    .offset([60,20])
+                    .html(d => `<br>Poverty: ${d.poverty} <br> HealthCare: ${d.healthcare}`);
+
+    g.call(tooltip);
+
+    markerGroup.on("click", function(data){
+        tooltip.show(data, this);
+    }).on("mouseout", function(data){
+        tooltip.hide(data)
+    });
+
+    //Axis Labels
+
+    g.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("class", "axisText")
+    .attr("x", 0 - margin.left -120  )
+    .attr("y", 0 - margin.bottom + 20)
+    .text("Lacks Healthcare(%)")
+    .attr("style", "font-size:10")
+    .attr("style", "font-weight:bold")
+
+    g.append("text").attr("class", "axisText")
+        .attr("x", margin.left + 80)
+        .attr("y", margin.bottom + 245)
+        .text("In Poverty(%)")
+        .attr("style", "font-size:10")
+        .attr("style", "font-weight:bold")
 
 
 
