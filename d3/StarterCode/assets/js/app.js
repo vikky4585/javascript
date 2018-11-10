@@ -20,9 +20,9 @@ var g = svg.append("g")
            .attr("transform", `translate(${margin.left}, ${margin.top})`);
 var xVal = "poverty";
 var yVal = "healthcare";
-
+var csvData;
 function prepareChart(data){
-
+    csvData = data;
     data.forEach(d => {
         d.age = +d.age;
         d.healthcare = +d.healthcare;
@@ -71,17 +71,6 @@ function prepareChart(data){
         .text(data[i].abbr);
 
     }
-    // var textGroup = g.selectAll("text")
-    //                     .data(data)
-    //                     .enter()
-    //                     .append("text")
-    //                     .attr("x", x => xScale(x.poverty))
-    //                     .attr("y", y => yScale(y.healthcare))
-    //                     .attr("text-anchor","middle")
-    //                     .attr("fill", "white")
-    //                     .attr("dy",".3em")
-    //                     .attr("style", "font-size:8")
-    //                     .text(t => t.abbr)
 
     var tooltip = d3.tip()
                     .attr("class","tooltip")
@@ -97,7 +86,7 @@ function prepareChart(data){
     });
 
     //Axis Labels
-
+    console.log("test0")
     g.append("text")
     .attr("transform", "rotate(-90)")
     .attr("class", "axisText")
@@ -114,6 +103,7 @@ function prepareChart(data){
     .attr("x", 0 - margin.left -140  )
     .attr("y", 0 - margin.bottom + 30)
     .text("Smokes(%)")
+    .attr("id", "smoke")
     .attr("style", "font-size:12")
 
     g.append("text")
@@ -121,6 +111,7 @@ function prepareChart(data){
     .attr("class", "axisText")
     .attr("x", 0 - margin.left -140  )
     .attr("y", 0 - margin.bottom + 10)
+    .attr("id", "obese")
     .text("Obese(%)")
     .attr("style", "font-size:12")
 
@@ -129,29 +120,69 @@ function prepareChart(data){
         .attr("x", margin.left + 80)
         .attr("y", margin.bottom + 210)
         .text("In Poverty(%)")
+        .attr("id", "poverty")
         .attr("style", "font-size:12")
     
     g.append("text").attr("class", "axisText")
         .attr("x", margin.left + 80)
         .attr("y", margin.bottom + 230)
         .text("Age(%)")
+        .attr("id", "age")
         .attr("style", "font-size:12")
     
     g.append("text").attr("class", "axisText")
         .attr("x", margin.left + 80)
         .attr("y", margin.bottom + 250)
+        .attr("id", "income")
         .text("Household Income(%)")
         .attr("style", "font-size:12")
 
+    d3.select("#healthcare").on("mouseover", function(x){
+            console.log("clicked healthcare label")
+            yVal = "healthcare";
+            prepareChart(csvData);
+        });
 
+    d3.select("#smoke").on("mouseover", function(x){
+            console.log("clicked smoke label")
+            yVal = "smokes";
+            prepareChart(csvData);
+        });
+    
+    d3.select("#obese").on("mouseover", function(x){
+            yVal = "obesity";
+            console.log("clicked obese label")
+            prepareChart(csvData);
+
+        });
+    
+    d3.select("#poverty").on("mouseover", function(x){
+            xVal = "poverty";
+            console.log("clicked poverty label")
+            prepareChart(csvData);
+
+        });
+
+    d3.select("#age").on("mouseover", function(x){
+            xVal = "age";
+            console.log("clicked age label")
+            prepareChart(csvData);
+
+        });
+    
+    d3.select("#income").on("mouseover", function(x){
+            console.log("clicked income label")
+            xVal = "income";
+            prepareChart(csvData);
+
+
+        });
 
 }
 
 d3.csv("assets/data/data.csv").then(prepareChart);
 
-d3.select("#healthcare").on("mouseover", function(x){
-    console.log("clicked healthcare label")
-});
+
 
 
 
