@@ -18,6 +18,8 @@ var svg = d3.select("#scatter")
 
 var g = svg.append("g")
            .attr("transform", `translate(${margin.left}, ${margin.top})`);
+var xVal = "poverty";
+var yVal = "healthcare";
 
 function prepareChart(data){
 
@@ -26,14 +28,16 @@ function prepareChart(data){
         d.healthcare = +d.healthcare;
         d.poverty = +d.poverty;
         d.smokes = +d.smokes;
+        d.obesity = +d.obesity;
+        d.income = +d.income;
     });
 
     var xScale = d3.scaleLinear()
-                   .domain([d3.min(data, d => d.poverty) - 1, d3.max(data, d => d.poverty)])
+                   .domain([d3.min(data, d => d[xVal]) - 1, d3.max(data, d => d[xVal])])
                    .range([0, chartW]);
 
     var yScale = d3.scaleLinear()
-                   .domain([0, d3.max(data, d => d.healthcare)])
+                   .domain([0, d3.max(data, d => d[yVal])])
                    .range([chartH, 0]);
 
     var bottomAxis = d3.axisBottom(xScale);
@@ -51,15 +55,15 @@ function prepareChart(data){
                         .data(data)
                         .enter()
                         .append("circle")
-                        .attr("cx", x => xScale(x.poverty))
-                        .attr("cy", y => yScale(y.healthcare))
+                        .attr("cx", x => xScale(x[xVal]))
+                        .attr("cy", y => yScale(y[yVal]))
                         .attr("r", "8")
                         .attr("fill", "darkgreen")
                         .attr("opacity", "0.5")
     
     for(var i =0 ; i < data.length; i++){
-        g.append("text").attr("x", xScale(data[i].poverty))
-        .attr("y", yScale(data[i].healthcare))
+        g.append("text").attr("x", xScale(data[i][xVal]))
+        .attr("y", yScale(data[i][yVal]))
         .attr("text-anchor","middle")
         .attr("fill", "white")
         .attr("dy",".3em")
@@ -100,6 +104,7 @@ function prepareChart(data){
     .attr("x", 0 - margin.left -140  )
     .attr("y", 0 - margin.bottom + 50)
     .text("Lacks Healthcare(%)")
+    .attr("id", "healthcare")
     .attr("style", "font-size:12")
     //.attr("style", "font-weight:bold")
 
@@ -143,4 +148,10 @@ function prepareChart(data){
 }
 
 d3.csv("assets/data/data.csv").then(prepareChart);
+
+d3.select("#healthcare").on("mouseover", function(x){
+    console.log("clicked healthcare label")
+});
+
+
 
