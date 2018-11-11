@@ -34,7 +34,6 @@ var yVal = "healthcare";
 var csvData = [];
 
 function prepareChart(data) {
-    attachEvents();
 
     csvData = data;
     data.forEach(d => {
@@ -49,6 +48,14 @@ function prepareChart(data) {
     var xScale = d3.scaleLinear()
         .domain([d3.min(data, d => d[xVal]) - 1, d3.max(data, d => d[xVal])])
         .range([0, chartW]);
+
+    if (xVal === "income") {
+        console.log("min " + d3.min(data, d => d[xVal]));
+        console.log("max " + d3.max(data, d => d[xVal]))
+        xScale = d3.scaleLinear()
+            .domain([d3.min(data, d => d[xVal]) - 1000, d3.max(data, d => d[xVal]) +2000])
+            .range([0, chartW])
+    }
 
     var yScale = d3.scaleLinear()
         .domain([0, d3.max(data, d => d[yVal])])
@@ -109,7 +116,7 @@ function prepareChart(data) {
         .text("Lacks Healthcare(%)")
         .attr("id", "healthcare")
         .attr("style", "font-size:12")
-        .on("click", function(d){
+        .on("click", function (d) {
             yVal = "healthcare";
             resetGraph();
         });
@@ -123,7 +130,7 @@ function prepareChart(data) {
         .text("Smokes(%)")
         .attr("id", "smoke")
         .attr("style", "font-size:12")
-        .on("click", function(d){
+        .on("click", function (d) {
             yVal = "smokes";
             resetGraph();
         });;
@@ -139,7 +146,7 @@ function prepareChart(data) {
         .on("click", function (x) {
             yVal = "obesity";
             resetGraph();
-    
+
         });;
 
 
@@ -163,7 +170,7 @@ function prepareChart(data) {
         .on("click", function (x) {
             xVal = "age";
             resetGraph();
-    
+
         });
 
     g.append("text").attr("class", "axisText")
