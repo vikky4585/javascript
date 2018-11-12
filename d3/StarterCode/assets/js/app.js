@@ -50,10 +50,8 @@ function prepareChart(data) {
         .range([0, chartW]);
 
     if (xVal === "income") {
-        console.log("min " + d3.min(data, d => d[xVal]));
-        console.log("max " + d3.max(data, d => d[xVal]))
         xScale = d3.scaleLinear()
-            .domain([d3.min(data, d => d[xVal]) - 1000, d3.max(data, d => d[xVal]) +2000])
+            .domain([d3.min(data, d => d[xVal]) - 1000, d3.max(data, d => d[xVal]) + 2000])
             .range([0, chartW])
     }
 
@@ -71,6 +69,12 @@ function prepareChart(data) {
 
     g.append("g").attr("id", "y-axis").call(leftAxis);
 
+    var tooltip = d3.tip()
+        .attr("class", "tooltip")
+        .offset([60, 20])
+        .html(d => `<br>Poverty: ${d.abbr} <br> HealthCare: ${d.healthcare}`);
+
+    g.call(tooltip);
 
     //create markers
     var markerGroup = g.selectAll("circle")
@@ -82,24 +86,40 @@ function prepareChart(data) {
         .attr("r", "8")
         .attr("fill", "darkgreen")
         .attr("opacity", "0.5")
+        
+
+
 
     for (var i = 0; i < data.length; i++) {
+        var txtData = data[i];
+
         g.append("text").attr("x", xScale(data[i][xVal]))
             .attr("y", yScale(data[i][yVal]))
             .attr("text-anchor", "middle")
             .attr("fill", "white")
             .attr("dy", ".3em")
             .attr("style", "font-size:8")
-            .text(data[i].abbr);
+            .attr("id", "circle-labels")
+            .text(data[i].abbr)
+            .on("click", function (txtData) {
+                tooltip.show(txtData, this);
+            }).on("mouseout", function (txtData) {
+                tooltip.hide(txtData)
+            });
+
 
     }
 
-    var tooltip = d3.tip()
-        .attr("class", "tooltip")
-        .offset([60, 20])
-        .html(d => `<br>Poverty: ${d.abbr} <br> HealthCare: ${d.healthcare}`);
+    g.selectAll("circle")
+        .data(data)
+        .enter()
+        .transition()
+        .duration(1000)
+        .attr("cx", x => xScale(x[xVal]))
+        .attr("cy", y => yScale(y[yVal]));
 
-    g.call(tooltip);
+
+
 
     markerGroup.on("click", function (data) {
         tooltip.show(data, this);
@@ -119,7 +139,14 @@ function prepareChart(data) {
         .on("click", function (d) {
             yVal = "healthcare";
             resetGraph();
-        });
+        })
+        .on("mouseover", function(d){
+            g.select("#healthcare").attr("style","font-weight:bold")
+        })
+        .on("mouseout", function(d){
+            g.select("#healthcare").attr("style","font-size:12")
+        })
+        
     //.attr("style", "font-weight:bold")
 
     g.append("text")
