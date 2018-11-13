@@ -44,6 +44,10 @@
   font-weight: bold
 }
 
+.axisTest:hover{
+  font-weight: bold
+}
+
 .d3-tip {
   padding: 6px;
   font-size: 12px;

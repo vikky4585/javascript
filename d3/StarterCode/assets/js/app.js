@@ -139,6 +139,8 @@ function prepareChart(data) {
         .on("click", function (d) {
             yVal = "healthcare";
             resetGraph();
+            let coords = d3.mouse(this);
+            console.log("coords are " + coords);
         })
         .on("mouseover", function(d){
             g.select("#healthcare").attr("style","font-weight:bold")
@@ -160,7 +162,21 @@ function prepareChart(data) {
         .on("click", function (d) {
             yVal = "smokes";
             resetGraph();
-        });;
+            let coords = d3.mouse(this);
+            console.log("coords " + coords)
+            g.append("circle")
+                .attr("class","click-circle")
+                .attr("cx",0 - margin.left - 140)
+                .attr("cy",0 - margin.bottom + 30)
+                .attr("r", 100)
+                .attr("fill","blue")
+        })
+        .on("mouseover", function(d){
+            g.select("#smoke").attr("style","font-weight:bold")
+        })
+        .on("mouseout", function(d){
+            g.select("#smoke").attr("style","font-size:12")
+        });
 
     g.append("text")
         .attr("transform", "rotate(-90)")
@@ -174,7 +190,13 @@ function prepareChart(data) {
             yVal = "obesity";
             resetGraph();
 
-        });;
+        })
+        .on("mouseover", function(d){
+            g.select("#obese").attr("style","font-weight:bold")
+        })
+        .on("mouseout", function(d){
+            g.select("#obese").attr("style","font-size:12")
+        });
 
 
     g.append("text").attr("class", "axisText")
@@ -186,7 +208,13 @@ function prepareChart(data) {
         .on("click", function (x) {
             xVal = "poverty";
             resetGraph();
-        });;
+        })
+        .on("mouseover", function(d){
+            g.select("#poverty").attr("style","font-weight:bold")
+        })
+        .on("mouseout", function(d){
+            g.select("#poverty").attr("style","font-size:12")
+        });
 
     g.append("text").attr("class", "axisText")
         .attr("x", margin.left + 80)
@@ -198,6 +226,12 @@ function prepareChart(data) {
             xVal = "age";
             resetGraph();
 
+        })
+        .on("mouseover", function(d){
+            g.select("#age").attr("style","font-weight:bold")
+        })
+        .on("mouseout", function(d){
+            g.select("#age").attr("style","font-size:12")
         });
 
     g.append("text").attr("class", "axisText")
@@ -209,6 +243,12 @@ function prepareChart(data) {
         .on("click", function (x) {
             xVal = "income";
             resetGraph();
+        })
+        .on("mouseover", function(d){
+            g.select("#income").attr("style","font-weight:bold")
+        })
+        .on("mouseout", function(d){
+            g.select("#income").attr("style","font-size:12")
         });
 
 }
