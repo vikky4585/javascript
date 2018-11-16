@@ -14,7 +14,8 @@ d3.csv("data/wi_2016.csv", function (data) {
   // Creating map object
   var myMap = L.map("map", {
     center: [44.7844, -88.7879],
-    zoom: 7
+    zoom: 7,
+    label: "test"
   });
 
   // Adding tile layer
@@ -24,7 +25,9 @@ d3.csv("data/wi_2016.csv", function (data) {
     id: "mapbox.streets",
     accessToken: API_KEY
   }).addTo(myMap);
-  function selectColor(county) {
+
+
+  function getDetails(county) {
 
     var countyData = csvData.filter(x => (x.county_name.includes(county)))
 
@@ -54,23 +57,32 @@ d3.csv("data/wi_2016.csv", function (data) {
     }else {
       opacity = 0.2;
     }
-    return [clr, opacity];
+    return [clr, opacity, dem, gop];
 
   }
 
   // Grabbing our GeoJSON data..
   d3.json("data/WI.geojson", function (data) {
-    //console.log("geoJson" + JSON.stringify(data))
     L.geoJson(data, {
       style: function (feature) {
-        let clr = selectColor(feature.properties.COUNTY_NAME);
+        let details = getDetails(feature.properties.COUNTY_NAME);
 
         return {
           color: "white",
-          fillColor: clr[0],
-          fillOpacity: clr[1],
+          fillColor: details[0],
+          fillOpacity: details[1],
           weight: 1.5
         }
+      },
+
+      onEachFeature: function(feature, layer) {
+        let details = getDetails(feature.properties.COUNTY_NAME);
+
+        layer.bindPopup("<h5>" + feature.properties.COUNTY_NAME + "</h5>"
+        +"<h5> D: " + details[2] + "</h5>"
+        + "<h5> R: " + details[3] + "</h5>"
+        );
+
       }
     }).addTo(myMap);
   });
@@ -80,68 +92,3 @@ d3.csv("data/wi_2016.csv", function (data) {
 
 
 
-// Link to GeoJSON
-
-var geojson;
-
-// Grab data with d3
-// d3.csv("data/wi_2016.csv", function(data) {
-
-
-//   // Create a new choropleth layer
-//   geojson = L.choropleth(data, {
-
-//     // Define what  property in the features to use
-//     valueProperty: "MHI",
-
-//     // Set color scale
-//     scale: ["#ffffb2", "#b10026"],
-
-//     // Number of breaks in step range
-//     steps: 10,
-
-//     // q for quartile, e for equidistant, k for k-means
-//     mode: "q",
-//     style: {
-//       // Border color
-//       color: "#fff",
-//       weight: 1,
-//       fillOpacity: 0.8
-//     },
-
-//     // Binding a pop-up to each layer
-//     onEachFeature: function(feature, layer) {
-//       layer.bindPopup(feature.properties.LOCALNAME + ", " + feature.properties.State + "<br>Median Household Income:<br>" +
-//         "$" + feature.properties.MHI);
-//     }
-//   }).addTo(myMap);
-
-//   // Set up the legend
-//   var legend = L.control({ position: "bottomright" });
-//   legend.onAdd = function() {
-//     var div = L.DomUtil.create("div", "info legend");
-//     var limits = geojson.options.limits;
-//     var colors = geojson.options.colors;
-//     var labels = [];
-
-//     // Add min & max
-//     var legendInfo = "<h1>Median Income</h1>" +
-//       "<div class=\"labels\">" +
-//         "<div class=\"min\">" + limits[0] + "</div>" +
-//         "<div class=\"max\">" + limits[limits.length - 1] + "</div>" +
-//       "</div>";
-
-//     div.innerHTML = legendInfo;
-
-//     limits.forEach(function(limit, index) {
-//       labels.push("<li style=\"background-color: " + colors[index] + "\"></li>");
-//     });
-
-//     div.innerHTML += "<ul>" + labels.join("") + "</ul>";
-//     return div;
-//   };
-
-//   // Adding legend to the map
-//   legend.addTo(myMap);
-
-// });
